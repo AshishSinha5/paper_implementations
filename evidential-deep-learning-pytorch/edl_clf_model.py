@@ -28,6 +28,7 @@ class edl_clf_model(nn.Module):
         self.l1 = nn.Linear(28*28, 100)
         self.l2 = nn.Linear(100, 50)
         self.dirichlet_layer = DenseDirichletLayer(50, 10)
+        self.beta = nn.Parameter(torch.FloatTensor(torch.ones((1, 10))))
         print(f'Model Instantiated \n{self}')
 
     def forward(self, x):
@@ -41,7 +42,7 @@ class edl_clf_model(nn.Module):
     def loss(self, alpha, label):
 
         def KL(alpha):
-            beta = torch.FloatTensor(torch.ones((1, alpha.shape[1])))
+            beta = self.beta
             S_alpha = torch.sum(alpha, axis = 1, keepdim=True)
             S_beta = torch.sum(beta, axis = 1, keepdim=True)
             lnB = torch.lgamma(S_alpha) - torch.sum(torch.lgamma(alpha), axis = 1, keepdim=True)

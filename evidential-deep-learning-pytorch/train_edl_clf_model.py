@@ -27,10 +27,10 @@ print(f"{torch.cuda.device_count() = }") # Check how many CUDA capable devices y
 print(f"{torch.cuda.get_device_name(0) = }")
 # Add more lines with +1 like get_device_name(3), get_device_name(4) if you have more devices.
 
-# device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
-device = torch.device('cpu')
-# torch.cuda.set_device(0)
-
+device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+# device = torch.device('cpu')
+torch.cuda.set_device(0)
+print(f'Device = {device}')
 
 def main():
     data_path = '../data/mnist/raw/mnist_train.csv'
@@ -70,8 +70,8 @@ def main():
 
             if (i > 0) and (i%400 == 0):
                 with torch.no_grad():
-                    train_labels = np.argmax(label, axis = 1)
-                    train_pred = np.argmax(pred, axis = 1)
+                    train_labels = np.argmax(label.detach().cpu().numpy(), axis = 1)
+                    train_pred = np.argmax(pred.detach().cpu().numpy(), axis = 1)
                     pred, alpha = clf.forward(torch.FloatTensor(test_inputs).to(device))
                     pred = pred.detach().cpu().numpy()
                     pred = np.argmax(pred, axis=1)
