@@ -39,7 +39,7 @@ class edl_clf_model(nn.Module):
         prob, alpha = self.dirichlet_layer(x)
         return prob, alpha
     
-    def loss(self, alpha, label):
+    def loss(self, alpha, label, t):
 
         def KL(alpha):
             beta = self.beta
@@ -60,9 +60,10 @@ class edl_clf_model(nn.Module):
         A = torch.sum((label - m)**2, axis=1, keepdim=True)
         B = torch.sum(alpha*(S - alpha)/(S*S*(S+1)), axis=1, keepdim=True)
         
+        reg = torch.min(torch.tensor(1.0), torch.tensor(t/10))
         alpha_hat = label + (1-label)*alpha
         C = KL(alpha_hat)
         C = torch.mean(C, axis = 1)
-        return torch.mean(A + B + C)
+        return torch.mean(A + B + reg*C)
     
     
