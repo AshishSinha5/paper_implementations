@@ -7,7 +7,8 @@
 
 We treat $Mult(y_i|p_i)$ with prior of $p_i$ being $Dir(p_i|\Theta)$. $\therefore$ the negated logarithm of the marginal likelihood is given by - 
 
-$$\begin{align*}
+$$
+\begin{align*}
 \mathcal{L}_{i}(\Theta) &= -log(\int \Pi_{j=1}^Kp_{ij}^{y_{ij}} \frac{1}{B(\alpha_i)}\Pi_{j=1}^K p_{ij}^{\alpha_{ij} - 1}d\bf{p_i}) \\
 &= -log(\frac{1}{B(\alpha_i)}\int \Pi_{j=1}^{K}p^{y_{ij} + \alpha_{ij} - 1} d\bf{p}) \\
 &= -log(\frac{B(\alpha_i + y_i)}{B(\alpha_i)}) \\
